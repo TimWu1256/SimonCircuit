@@ -1,15 +1,15 @@
-from qiskit.visualization import circuit_drawer
 import numpy as np
 
-def error():
-    return 'NotFullRankError!'
+class NotFullRankError(Exception):
+    pass
 
 def solve(bitstrings: list[str]) -> str:
+    # bitstrings = [np.array([int(x) for x in s], dtype=bool) for s in bitstrings]
     matrix = np.vstack([np.array([int(x) for x in s], dtype=bool) for s in bitstrings])
 
     # Check if there are n - 1 equations and whether the nil vector is among them
     if not matrix.any(axis=1).all() or matrix.shape[0] != matrix.shape[1] - 1:
-        return error()
+        raise NotFullRankError()
 
     # Reduce
     for i in range(matrix.shape[0] - 1):
@@ -19,7 +19,7 @@ def solve(bitstrings: list[str]) -> str:
 
         # Check if the equations were linearly independent
         if not matrix.any(axis=1).all():
-            return error()
+            raise NotFullRankError()
 
     # Transforming matrix from a ref to a rref
     for i in range(1, matrix.shape[0]):
@@ -36,11 +36,6 @@ def solve(bitstrings: list[str]) -> str:
 
     return "".join(str(x) for x in np.hstack((matrix[:index, index], [1], matrix[index:, index])))
 
-def y_dot_s(s, y):
-    accum = 0
-    for i in range(len(s)):
-        accum += int(s[i]) * int(y[i])
-    return (accum % 2)
-
-def draw(qc):
-    return circuit_drawer(qc, output='text')
+if __name__ == '__main__':
+    res = solve(['100', '010', '110']) # Compute s
+    print(res)
