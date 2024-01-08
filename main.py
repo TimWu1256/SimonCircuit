@@ -1,6 +1,6 @@
-from pprint import pprint
-
 from qiskit import Aer, execute
+
+from pprint import pprint
 
 from src.simon import Simon
 from src.utils import draw, y_dot_s, solve
@@ -23,12 +23,12 @@ def main(n:int, s:str, shots:int=1024) -> None:
     print(f'Secret string = \'{s}\'')
     pprint(counts)
 
-    ## y dot s = 0 (mod 2)
+    ## check
     if 0:
         for y in counts:
             print( f'{s} ⋅ {y} = {y_dot_s(s, y)} (mod 2)')
 
-    ## solve s
+    ## solve
     counts_list = [count for count in list(counts.keys()) if not all(c == '0' for c in count)]   # remove all zero counts
     s = solve(counts_list)
     print(f's = {s}')

@@ -7,17 +7,20 @@ class Simon(QuantumCircuit):
         super().__init__(_qr, _cr)
         self.secret_str = s
 
+    """
+        https://github.com/qiskit-community/qiskit-textbook/blob/main/qiskit-textbook-src/qiskit_textbook/tools/__init__.py
+    """
     def oracle(self):
         """returns a Simon oracle for bitstring b"""
         s = self.secret_str[::-1] # reverse b for easy iteration
         n = len(s)
-        # Do copy; |x>|0> -> |x>|x>
+        ## Do copy; |x>|0> -> |x>|x>
         for q in range(n):
             self.cx(q, q+n)
         if '1' not in s:
             return  # 1:1 mapping, so just exit
         i = s.find('1') # index of first non-zero bit in b
-        # Do |x> -> |s.x> on condition that q_i is 1
+        ## Do |x> -> |s.x> on condition that q_i is 1
         for q in range(n):
             if s[q] == '1':
                 self.cx(i, (q)+n)
