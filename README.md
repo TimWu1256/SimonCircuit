@@ -15,7 +15,3 @@ This project includes Qiskit implementations of solving Simon's Problem for `N`-
 ```
 $ python main.py
 ```
-
-# TODO
-
-Find out how to solve **s** for any **NUM**
