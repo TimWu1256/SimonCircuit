@@ -11,7 +11,7 @@ class Simon(QuantumCircuit):
         https://github.com/qiskit-community/qiskit-textbook/blob/main/qiskit-textbook-src/qiskit_textbook/tools/__init__.py
     """
     def oracle(self):
-        """returns a Simon oracle for bitstring b"""
+        """returns a Simon oracle for bitstring s"""
         s = self.secret_str[::-1] # reverse b for easy iteration
         n = len(s)
         ## Do copy; |x>|0> -> |x>|x>

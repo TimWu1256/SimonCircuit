@@ -37,5 +37,5 @@ def solve(bitstrings: list[str]) -> str:
     return "".join(str(x) for x in np.hstack((matrix[:index, index], [1], matrix[index:, index])))
 
 if __name__ == '__main__':
-    res = solve(['100', '010', '110']) # Compute s
+    res = solve(['010', '001']) # Compute s
     print(res)
