@@ -1,0 +1,16 @@
+function oracle(secret_str)
+    s = reverse(secret_str)
+    n = length(s)
+    for q = 0 to n
+        controlled_X(q, q+n)
+    end for
+    if '1' is not in s
+        return
+    end if
+    i = find_first_nonzero_index(s)
+    for q = 0 to n
+        if s[q] is '1' then
+            controlled_X(i, q+n)
+        end if
+    end for
+end function

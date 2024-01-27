@@ -1,4 +1,5 @@
 from qiskit import QuantumRegister, ClassicalRegister, QuantumCircuit
+from qiskit.visualization import circuit_drawer
 
 class Simon(QuantumCircuit):
     def __init__(self, n, s):
@@ -12,18 +13,22 @@ class Simon(QuantumCircuit):
     """
     def oracle(self):
         """returns a Simon oracle for bitstring s"""
-        s = self.secret_str[::-1] # reverse b for easy iteration
+        s = self.secret_str[::-1] # reverse s for easy iteration
         n = len(s)
+
         ## Do copy; |x>|0> -> |x>|x>
         for q in range(n):
             self.cx(q, q+n)
+
         if '1' not in s:
             return  # 1:1 mapping, so just exit
+
         i = s.find('1') # index of first non-zero bit in b
+
         ## Do |x> -> |s.x> on condition that q_i is 1
         for q in range(n):
             if s[q] == '1':
-                self.cx(i, (q)+n)
+                self.cx(i, q+n)
 
     def build(self):
         n = self.num_qubits
@@ -44,6 +49,15 @@ class Simon(QuantumCircuit):
             self.h(_qr[i])
         self.barrier()
 
+        """
+            https://quantumcomputing.stackexchange.com/questions/23517/is-the-measurement-of-the-second-register-in-simons-algorithm-superfluous
+        """
         ## measure
         for i in range(n//2):
             self.measure(_qr[i], _cr[i])
+
+    def draw_text(self):
+        return circuit_drawer(self, output='text')
+
+    def draw_mpl(self, file_path):
+        return circuit_drawer(self, output='mpl', filename=file_path)
